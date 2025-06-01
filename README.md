@@ -23,9 +23,9 @@ A modern, clean, and user-friendly interface for browsing and testing Falcon API
 
 ### Installation
 
-1. Clone this repository to your web server:
+1. Home:
    ```bash
-   git clone https://github.com/FlowFalcon/falcon-api-ui.git
+   https://cukiiiiiiifurnaai.vercel.app/
    ```
 
 2. Configure your API endpoints in `settings.json` (see Configuration section below)
