@@ -21,7 +21,7 @@ module.exports = function (app) {
         return res.data;
     }
 
-    app.get('/dl/terabox', async (req, res) => {
+    app.get('/download/terabox', async (req, res) => {
         try {
             const { url } = req.query;
             if (!url) return res.status(400).json({ status: false, message: 'Missing url parameter' });
