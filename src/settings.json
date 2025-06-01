@@ -57,6 +57,15 @@
           "params": {
             "q": "Search query"
           }
+        },
+        {
+          "name": "Pinterest",
+          "desc": "Search Pinterest images",
+          "path": "/search/pinterest?q=",
+          "status": "ready",
+          "params": {
+            "q": "Search query for Pinterest"
+          }
         }
       ]
     },
@@ -75,4 +84,4 @@
       ]
     }
   ]
-        }
+}
