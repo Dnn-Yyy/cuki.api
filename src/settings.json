@@ -80,8 +80,17 @@
           "params": {
             "url": "Full URL of Terabox shared file"
           }
+        },
+        {
+          "name": "Mediafire Downloader",
+          "desc": "Get direct download link and file info from mediafire link",
+          "path": "/download/mediafire?url=",
+          "status": "ready",
+          "params": {
+            "url": "Full Mediafire file URL (e.g. https://www.mediafire.com/file/...)"
+          }
         }
       ]
     }
   ]
-}
+        }
