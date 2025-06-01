@@ -11,62 +11,64 @@
     "apikey": ["CukiDG"]
   },
   "categories": [
-  {
-    "name": "AI (Artificial Intelligence)",
-    "items": [
-      {
-        "name": "LuminAI",
-        "desc": "Talk with luminai",
-        "path": "/ai/luminai?text=",
-        "status": "ready",
-        "params": {
-          "text": "Text for luminai to respond to"
+    {
+      "name": "AI (Artificial Intelligence)",
+      "items": [
+        {
+          "name": "LuminAI",
+          "desc": "Talk with luminai",
+          "path": "/ai/luminai?text=",
+          "status": "ready",
+          "params": {
+            "text": "Text for luminai to respond to"
+          }
+        },
+        {
+          "name": "GptOnline",
+          "desc": "Masukan promt dan daoatkan jawaban",
+          "path": "/ai/gpt?text=",
+          "status": "ready",
+          "params": {
+            "text": "Text for luminai to respond to"
+          }
+        },
+       {
+          "name": "HydroMind",
+          "desc": "See the list of supported AI models here: https://mind.hydrooo.web.id",
+          "path": "/ai/hydromind?text=&model=",
+          "status": "ready",
+          "params": {
+            "text": "Teks atau perintah untuk chat AI",
+            "model":"1See the list of supported AI models here: https://mind.hydrooo.web.id"
+          }
+        },
+        n
+      ]
+    },
+    {
+      "name": "Random",
+      "items": [
+        {
+          "name": "Blue Archive",
+          "desc": "Blue Archive Random Images",
+          "path": "/random/ba",
+          "status": "ready"
         }
-      },
-      {
-        "name": "HydroMind",
-        "desc": "See the list of supported AI models here: https://mind.hydrooo.web.id",
-        "path": "/ai/hydromind?text=&model=",
-        "status": "ready",
-        "params": {
-          "text": "Teks atau perintah untuk chat AI",
-          "model": "1See the list of supported AI models here: https://mind.hydrooo.web.id"
+      ]
+    },
+    {
+      "name": "Search Tools",
+      "items": [
+        {
+          "name": "YouTube",
+          "desc": "Video search",
+          "path": "/search/youtube?q=",
+          "status": "ready",
+          "params": {
+            "q": "Search query"
+          }
         }
-      },
-      {
-        "name": "OnlineGPT",
-        "desc": "Ask anything to OnlineGPT (scraped from onlinegpt.org)",
-        "path": "/ai/onlinegpt?text=",
-        "status": "ready",
-        "params": {
-          "text": "Teks atau pertanyaan untuk dikirim ke OnlineGPT"
-        }
-      }
-    ]
-  },
-  {
-    "name": "Random",
-    "items": [
-      {
-        "name": "Blue Archive",
-        "desc": "Blue Archive Random Images",
-        "path": "/random/ba",
-        "status": "ready"
-      }
-    ]
-  },
-  {
-    "name": "Search Tools",
-    "items": [
-      {
-        "name": "YouTube",
-        "desc": "Video search",
-        "path": "/search/youtube?q=",
-        "status": "ready",
-        "params": {
-          "q": "Search query"
-        }
-      }
-    ]
-  }
+      ]
+    }               
   ]
+}
