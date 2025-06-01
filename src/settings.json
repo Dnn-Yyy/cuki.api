@@ -1,5 +1,5 @@
 {
-  "name": "Cuki-Digital api",
+  "name": "Falcon-Api UI",
   "version": "v1.0.0",
   "description": "Simple and easy to use API.",
   "bannerImage": "/src/banner.jpg",
@@ -7,8 +7,8 @@
     "status": "Online!"
   },
   "apiSettings": {
-    "creator": "Cuki Digital", 
-    "apikey": ["CukiDG"]
+    "creator": "FlowFalcon", 
+    "apikey": ["falcon-api"]
   },
   "categories": [
     {
@@ -32,7 +32,7 @@
             "text": "Teks atau perintah untuk chat AI",
             "model":"1See the list of supported AI models here: https://mind.hydrooo.web.id"
           }
-        },
+        }
       ]
     },
     {
