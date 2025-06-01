@@ -82,6 +82,15 @@
           }
         },
         {
+          "name": "Facebook Downloader",
+          "desc": "Download video Facebook",
+          "path": "/download/facebook",
+          "status": "ready",
+          "params": {
+            "url": "Masukan Link Facebook"
+          }
+        },
+        {
           "name": "Mediafire Downloader",
           "desc": "Get direct download link and file info from mediafire link",
           "path": "/download/mediafire?url=",
