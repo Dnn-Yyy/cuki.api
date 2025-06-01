@@ -82,21 +82,21 @@
           }
         },
         {
-          "name": "Facebook Downloader",
-          "desc": "Download video Facebook",
-          "path": "/download/facebook",
-          "status": "ready",
-          "params": {
-            "url": "Masukan Link Facebook"
-          }
-        },
-        {
           "name": "Mediafire Downloader",
           "desc": "Get direct download link and file info from mediafire link",
           "path": "/download/mediafire?url=",
           "status": "ready",
           "params": {
             "url": "Full Mediafire file URL (e.g. https://www.mediafire.com/file/...)"
+          }
+        },
+        {
+          "name": "Facebook Downloader",
+          "desc": "Download video from Facebook shared link",
+          "path": "/d/facebook?url=",
+          "status": "ready",
+          "params": {
+            "url": "Full Facebook shared URL (e.g. https://www.facebook.com/...)"
           }
         }
       ]
