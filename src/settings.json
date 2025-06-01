@@ -29,7 +29,7 @@
           "path": "/ai/gpt?text=",
           "status": "ready",
           "params": {
-            "text": "Text for luminai to respond to"
+            "text": "Text for gpt"
           }
         },
        {
