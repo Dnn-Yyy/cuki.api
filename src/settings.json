@@ -24,6 +24,15 @@
           }
         },
         {
+  "name": "FluxAI",
+  "desc": "Generate AI Image dari prompt teks",
+  "path": "/ai/flux?prompt=",
+  "status": "ready",
+  "params": {
+    "prompt": "Deskripsi gambar yang ingin dihasilkan (misalnya: buatkan gambar cyberpunk lizard)"
+  }
+        }
+        {
           "name": "HydroMind",
           "desc": "See the list of supported AI models here: https://mind.hydrooo.web.id",
           "path": "/ai/hydromind?text=&model=",
