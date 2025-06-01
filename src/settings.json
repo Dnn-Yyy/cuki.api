@@ -93,7 +93,7 @@
         {
           "name": "Facebook Downloader",
           "desc": "Download video from Facebook shared link",
-          "path": "/d/facebook?url=",
+          "path": "/download/facebook?url=",
           "status": "ready",
           "params": {
             "url": "Full Facebook shared URL (e.g. https://www.facebook.com/...)"
