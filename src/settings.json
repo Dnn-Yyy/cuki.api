@@ -23,15 +23,6 @@
             "text": "Text for luminai to respond to"
           }
         },
-        {
-          "name": "GptOnline",
-          "desc": "Masukan promt dan daoatkan jawaban",
-          "path": "/ai/gpt?text=",
-          "status": "ready",
-          "params": {
-            "text": "Text for gpt"
-          }
-        },
        {
           "name": "HydroMind",
           "desc": "See the list of supported AI models here: https://mind.hydrooo.web.id",
