@@ -38,7 +38,7 @@ All API endpoints and categories are configured in the `settings.json` file. The
 
 ```json
 {
-  "name": "Falcon-Api",
+  "name": "Cuki-api",
   "version": "v1.2",
   "description": "Simple and easy to use API.",
   "bannerImage": "/src/banner.jpg",
