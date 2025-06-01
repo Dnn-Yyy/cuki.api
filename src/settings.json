@@ -43,32 +43,30 @@
         }
       }
     ]
+  },
+  {
+    "name": "Random",
+    "items": [
+      {
+        "name": "Blue Archive",
+        "desc": "Blue Archive Random Images",
+        "path": "/random/ba",
+        "status": "ready"
+      }
+    ]
+  },
+  {
+    "name": "Search Tools",
+    "items": [
+      {
+        "name": "YouTube",
+        "desc": "Video search",
+        "path": "/search/youtube?q=",
+        "status": "ready",
+        "params": {
+          "q": "Search query"
+        }
+      }
+    ]
   }
   ]
-    {
-      "name": "Random",
-      "items": [
-        {
-          "name": "Blue Archive",
-          "desc": "Blue Archive Random Images",
-          "path": "/random/ba",
-          "status": "ready"
-        }
-      ]
-    },
-    {
-      "name": "Search Tools",
-      "items": [
-        {
-          "name": "YouTube",
-          "desc": "Video search",
-          "path": "/search/youtube?q=",
-          "status": "ready",
-          "params": {
-            "q": "Search query"
-          }
-        }
-      ]
-    }               
-  ]
-}
