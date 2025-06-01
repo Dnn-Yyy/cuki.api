@@ -1,4 +1,4 @@
-# Falcon API UI
+# Cuki simple api
 
 A modern, clean, and user-friendly interface for browsing and testing Falcon API endpoints.
 
@@ -46,8 +46,8 @@ All API endpoints and categories are configured in the `settings.json` file. The
     "status": "Online!"
   },
   "apiSettings": {
-    "creator": "FlowFalcon", 
-    "apikey": ["falcon-api"]
+    "creator": "CukiDigital", 
+    "apikey": ["CukiDG"]
   },
   "categories": [
     {
