@@ -68,7 +68,8 @@
           },
           "response_note": "Mengembalikan daftar gambar dari Pinterest dalam array url"
         }
-        },
+      ]
+    },
     {
       "name": "Downloader",
       "items": [
@@ -84,4 +85,4 @@
       ]
     }
   ]
-}
+          }
