@@ -61,7 +61,7 @@
         {
           "name": "Pinterest",
           "desc": "Search random Pinterest image from keyword",
-          "path": "/api/pinterest?q=",
+          "path": "/search/pinterest?q=",
           "status": "ready",
           "params": {
             "q": "Search keyword (e.g. anime girl)"
