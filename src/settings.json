@@ -59,13 +59,14 @@
           }
         },
         {
-          "name": "Pinterest",
-          "desc": "Search random Pinterest image from keyword",
+          "name": "Pinterest Search",
+          "desc": "Mencari gambar dari Pinterest berdasarkan keyword.",
           "path": "/search/pinterest?q=",
           "status": "ready",
           "params": {
-            "q": "Search keyword (e.g. anime girl)"
-          }
+            "q": "Kata kunci pencarian Pinterest"
+          },
+          "response_note": "Mengembalikan daftar gambar dari Pinterest dalam array url"
         }
       ]
     },
