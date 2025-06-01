@@ -7,7 +7,7 @@
     "status": "Online!"
   },
   "apiSettings": {
-    "creator": "Cuki Digital", 
+    "creator": "Cuki Digital",
     "apikey": ["CukiDG"]
   },
   "categories": [
@@ -61,13 +61,27 @@
         {
           "name": "Pinterest",
           "desc": "Search random Pinterest image from keyword",
-          "path": "/ai/pinterest?q=",
+          "path": "/api/pinterest?q=",
           "status": "ready",
           "params": {
             "q": "Search keyword (e.g. anime girl)"
           }
         }
       ]
+    },
+    {
+      "name": "Downloader",
+      "items": [
+        {
+          "name": "Terabox Downloader",
+          "desc": "Download file from terabox.com link",
+          "path": "/download/terabox?url=",
+          "status": "ready",
+          "params": {
+            "url": "Full URL of Terabox shared file"
+          }
+        }
+      ]
     }
   ]
-        }
+}
