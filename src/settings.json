@@ -32,6 +32,15 @@
             "text": "Teks atau perintah untuk chat AI",
             "model": "1See the list of supported AI models here: https://mind.hydrooo.web.id"
           }
+        },
+        {
+          "name": "BlackboxAI",
+          "desc": "Chatting with Blackbox AI",
+          "path": "/ai/blackboxai?text=",
+          "status": "ready",
+          "params": {
+            "text": "Input untuk dikirim ke BlackboxAI"
+          }
         }
       ]
     },
@@ -102,4 +111,4 @@
       ]
     }
   ]
-        }
+}
