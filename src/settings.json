@@ -35,7 +35,7 @@
         {
           "name": "Flux Ai",
           "desc": "Buat gambar pakai promt di FluxAi",
-          "path": "/ai/flux?query=",
+          "path": "/ai/flux?prompt=",
           "status": "ready",
           "params": {
             "text": "Masukan Promt yg ingin di jadikan gambar"
