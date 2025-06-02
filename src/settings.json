@@ -24,6 +24,15 @@
           }
         },
         {
+          "name": "MuslimAI",
+          "desc": "AI islami untuk menjawab pertanyaan seputar Islam",
+          "path": "/ai/muslimai?query=",
+          "status": "ready",
+          "params": {
+          "query": "Pertanyaan atau kata kunci seputar Islam"
+        }
+        },
+        {
           "name": "HydroMind",
           "desc": "See the list of supported AI models here: https://mind.hydrooo.web.id",
           "path": "/ai/hydromind?text=&model=",
