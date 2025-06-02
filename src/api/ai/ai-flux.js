@@ -25,7 +25,7 @@ module.exports = function (app) {
       if (!response.ok) {
         return res.status(response.status).json({
           status: false,
-          creator: 'ZenzzXD',
+          creator: 'Cuki Digital',
           message: `Upstream API error: ${response.statusText}`
         });
       }
