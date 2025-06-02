@@ -43,7 +43,7 @@
     "height": "Tinggi gambar (default: 1024)",
     "enhance": "true / false (untuk meningkatkan kualitas gambar)"
   }
-        }
+        },
         {
           "name": "MuslimAI",
           "desc": "AI islami untuk menjawab pertanyaan seputar Islam",
