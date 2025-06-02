@@ -33,6 +33,15 @@
           }
         },
         {
+          "name": "Flux Ai",
+          "desc": "Buat gambar pakai promt di FluxAi",
+          "path": "/ai/flux?query=",
+          "status": "ready",
+          "params": {
+            "text": "Masukan Promt yg ingin di jadikan gambar"
+          }
+        },
+        {
           "name": "MuslimAI",
           "desc": "AI islami untuk menjawab pertanyaan seputar Islam",
           "path": "/ai/muslimai?query=",
