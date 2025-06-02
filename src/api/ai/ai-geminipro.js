@@ -1,12 +1,11 @@
-
 const axios = require("axios");
 
 const CREATOR_NAME = "Cuki Digital";
-const BASE_URL = "https://api.siputzx.my.id/api/ai/flux?prompt=";
+const BASE_URL = "https://api.siputzx.my.id/api/ai/gemini-pro?content=";
 
-async function generateFluxImage(prompt) {
+async function askGeminiPro(content) {
   try {
-    const { data } = await axios.get(BASE_URL + encodeURIComponent(prompt));
+    const { data } = await axios.get(BASE_URL + encodeURIComponent(content));
     const result = data.result || data;
 
     return {
@@ -18,25 +17,25 @@ async function generateFluxImage(prompt) {
     return {
       status: false,
       creator: CREATOR_NAME,
-      message: "Gagal mengambil data dari API FluxAI",
+      message: "Gagal mengambil respons dari Gemini-Pro",
       error: err.message
     };
   }
 }
 
 module.exports = function (app) {
-  app.get("/ai/flux", async (req, res) => {
-    const { prompt } = req.query;
+  app.get("/ai/gemini-pro", async (req, res) => {
+    const { content } = req.query;
 
-    if (!prompt) {
+    if (!content) {
       return res.status(400).json({
         status: false,
         creator: CREATOR_NAME,
-        message: "Parameter 'prompt' wajib diisi"
+        message: "Parameter 'content' wajib diisi"
       });
     }
 
-    const result = await generateFluxImage(prompt.trim());
+    const result = await askGeminiPro(content.trim());
     res.json(result);
   });
 };
