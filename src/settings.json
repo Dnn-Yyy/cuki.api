@@ -24,6 +24,15 @@
           }
         },
         {
+          "name": "PowerBrain ai",
+          "desc": "Power Brain ai pintar",
+          "path": "/ai/powerbrainai?text=",
+          "status": "ready",
+          "params": {
+            "text": "Text for PowerBrain ai to respond to"
+          }
+        },
+        {
           "name": "MuslimAI",
           "desc": "AI islami untuk menjawab pertanyaan seputar Islam",
           "path": "/ai/muslimai?query=",
