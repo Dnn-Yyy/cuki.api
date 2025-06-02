@@ -43,12 +43,12 @@
           }
         },
         {
-          "name": "FluxAI",
-          "desc": "Generate AI Image dari prompt teks",
-          "path": "/ai/flux?prompt=",
+          "name": "GeminiPro",
+          "desc": "Chatting dengan AI Gemini Pro seperti Google Bard",
+          "path": "/ai/gemini-pro?content=",
           "status": "ready",
           "params": {
-            "prompt": "Deskripsi gambar yang ingin dihasilkan (misalnya: buatkan gambar cyberpunk lizard)"
+            "content": "Isi pesan atau pertanyaan untuk dijawab oleh Gemini Pro"
           }
         }
       ]
