@@ -180,6 +180,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const openApiData = await response.json();
+        const routes = openApiData.routes || [];
 
         const setContent = (id, property, value, fallback = '') => {
             const element = document.getElementById(id);
@@ -221,7 +222,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const apiContent = document.getElementById('apiContent');
-        const routes = openApiData.routes || [];
 
         if (!routes.length) {
             apiContent.innerHTML = `
@@ -289,6 +289,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     getBtn.className = 'btn get-api-btn';
                     getBtn.innerHTML = '<i class="fas fa-code"></i> GET';
                     getBtn.dataset.apiPath = item.path;
+                    getBtn.dataset.apiMethod = item.method;
                     getBtn.dataset.apiName = `${item.method} ${item.path}`;
                     getBtn.dataset.apiDesc = item.description || '';
                     getBtn.setAttribute('aria-label', `Get ${item.method} ${item.path}`);
@@ -446,198 +447,207 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         document.addEventListener('click', event => {
-    const getApiBtn = event.target.closest('.get-api-btn');
-    if (!getApiBtn) return;
+            const getApiBtn = event.target.closest('.get-api-btn');
+            if (!getApiBtn) return;
 
-    getApiBtn.classList.add('pulse-animation');
-    setTimeout(() => {
-        getApiBtn.classList.remove('pulse-animation');
-    }, 300);
-
-    const { apiPath, apiName, apiDesc } = getApiBtn.dataset;
-    const modal = new bootstrap.Modal(document.getElementById('apiResponseModal'));
-    const modalRefs = {
-        label: document.getElementById('apiResponseModalLabel'),
-        desc: document.getElementById('apiResponseModalDesc'),
-        content: document.getElementById('apiResponseContent'),
-        container: document.getElementById('responseContainer'),
-        endpoint: document.getElementById('apiEndpoint'),
-        spinner: document.getElementById('apiResponseLoading'),
-        queryInputContainer: document.getElementById('apiQueryInputContainer'),
-        submitBtn: document.getElementById('submitQueryBtn')
-    };
-
-    modalRefs.label.textContent = apiName;
-    modalRefs.desc.textContent = apiDesc;
-    modalRefs.content.textContent = '';
-    modalRefs.endpoint.textContent = '';
-    modalRefs.spinner.classList.add('d-none');
-    modalRefs.content.classList.add('d-none');
-    modalRefs.container.classList.add('d-none');
-    modalRefs.endpoint.classList.add('d-none');
-
-    modalRefs.queryInputContainer.innerHTML = '';
-    modalRefs.submitBtn.classList.add('d-none');
-    modalRefs.submitBtn.disabled = true;
-    modalRefs.submitBtn.classList.remove('btn-active');
-
-    // Cari route di data openapi
-    const currentRoute = routes.find(route => route.path === apiPath);
-    const parameters = currentRoute?.parameters || [];
-    const requiredParams = parameters.filter(p => p.required !== false);
-
-    // Jika ada parameter yang wajib, tampilkan form input
-    if (requiredParams.length > 0) {
-        const paramContainer = document.createElement('div');
-        paramContainer.className = 'param-container';
-
-        const formTitle = document.createElement('h6');
-        formTitle.className = 'param-form-title';
-        formTitle.innerHTML = '<i class="fas fa-sliders-h"></i> Parameters';
-        paramContainer.appendChild(formTitle);
-
-        requiredParams.forEach((param, index) => {
-            const paramGroup = document.createElement('div');
-            paramGroup.className = index < requiredParams.length - 1 ? 'mb-3 param-group' : 'param-group';
-
-            const labelContainer = document.createElement('div');
-            labelContainer.className = 'param-label-container';
-
-            const label = document.createElement('label');
-            label.className = 'form-label';
-            label.textContent = param.name;
-            label.htmlFor = `param-${param.name}`;
-
-            const requiredSpan = document.createElement('span');
-            requiredSpan.className = 'required-indicator';
-            requiredSpan.textContent = '*';
-            label.appendChild(requiredSpan);
-
-            labelContainer.appendChild(label);
-
-            if (param.description) {
-                const tooltipIcon = document.createElement('i');
-                tooltipIcon.className = 'fas fa-info-circle param-info';
-                tooltipIcon.setAttribute('data-bs-toggle', 'tooltip');
-                tooltipIcon.setAttribute('data-bs-placement', 'top');
-                tooltipIcon.title = param.description;
-                labelContainer.appendChild(tooltipIcon);
-            }
-
-            paramGroup.appendChild(labelContainer);
-
-            const inputContainer = document.createElement('div');
-            inputContainer.className = 'input-container';
-
-            const inputField = document.createElement('input');
-            inputField.type = 'text';
-            inputField.className = 'form-control custom-input';
-            inputField.id = `param-${param.name}`;
-            inputField.placeholder = `Enter ${param.name}...`;
-            inputField.dataset.param = param.name;
-            inputField.required = true;
-            inputField.autocomplete = "off";
-
-            inputField.addEventListener('focus', () => {
-                inputContainer.classList.add('input-focused');
-            });
-
-            inputField.addEventListener('blur', () => {
-                inputContainer.classList.remove('input-focused');
-                if (!inputField.value.trim()) {
-                    inputField.classList.add('is-invalid');
-                } else {
-                    inputField.classList.remove('is-invalid');
-                }
-            });
-
-            inputField.addEventListener('input', validateInputs);
-
-            inputContainer.appendChild(inputField);
-            paramGroup.appendChild(inputContainer);
-            paramContainer.appendChild(paramGroup);
-        });
-
-        if (currentRoute?.description) {
-            const innerDescDiv = document.createElement('div');
-            innerDescDiv.className = 'inner-desc';
-            innerDescDiv.innerHTML = `<i class="fas fa-info-circle"></i> ${currentRoute.description.replace(/\n/g, '<br>')}`;
-            paramContainer.appendChild(innerDescDiv);
-        }
-
-        modalRefs.queryInputContainer.appendChild(paramContainer);
-        modalRefs.submitBtn.classList.remove('d-none');
-
-        modalRefs.submitBtn.onclick = async () => {
-            const inputs = modalRefs.queryInputContainer.querySelectorAll('input');
-            const newParams = new URLSearchParams();
-            let isValid = true;
-
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    input.classList.add('is-invalid');
-                    input.parentElement.classList.add('shake-animation');
-                    setTimeout(() => {
-                        input.parentElement.classList.remove('shake-animation');
-                    }, 500);
-                } else {
-                    input.classList.remove('is-invalid');
-                    newParams.append(input.dataset.param, input.value.trim());
-                }
-            });
-
-            if (!isValid) {
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'alert alert-danger mt-3 fade-in';
-                errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all required fields.';
-
-                const existingError = modalRefs.queryInputContainer.querySelector('.alert');
-                if (existingError) existingError.remove();
-
-                modalRefs.queryInputContainer.appendChild(errorMsg);
-
-                modalRefs.submitBtn.classList.add('shake-animation');
-                setTimeout(() => {
-                    modalRefs.submitBtn.classList.remove('shake-animation');
-                }, 500);
-
-                return;
-            }
-
-            modalRefs.submitBtn.disabled = true;
-            modalRefs.submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
-
-            const basePath = apiPath.split('?')[0];
-            const apiUrlWithParams = `${window.location.origin}${basePath}?${newParams.toString()}`;
-
-            modalRefs.queryInputContainer.style.opacity = '0';
+            getApiBtn.classList.add('pulse-animation');
             setTimeout(() => {
-                modalRefs.queryInputContainer.innerHTML = '';
-                modalRefs.queryInputContainer.style.opacity = '1';
-                modalRefs.submitBtn.classList.add('d-none');
-                handleApiRequest(apiUrlWithParams, modalRefs, apiName);
+                getApiBtn.classList.remove('pulse-animation');
             }, 300);
-        };
 
-        // Inisialisasi tooltip untuk parameter
-        const tooltips = modalRefs.queryInputContainer.querySelectorAll('[data-bs-toggle="tooltip"]');
-        tooltips.forEach(tooltip => {
-            new bootstrap.Tooltip(tooltip);
+            const { apiPath, apiMethod, apiName, apiDesc } = getApiBtn.dataset;
+            const modal = new bootstrap.Modal(document.getElementById('apiResponseModal'));
+            const modalRefs = {
+                label: document.getElementById('apiResponseModalLabel'),
+                desc: document.getElementById('apiResponseModalDesc'),
+                content: document.getElementById('apiResponseContent'),
+                container: document.getElementById('responseContainer'),
+                endpoint: document.getElementById('apiEndpoint'),
+                spinner: document.getElementById('apiResponseLoading'),
+                queryInputContainer: document.getElementById('apiQueryInputContainer'),
+                submitBtn: document.getElementById('submitQueryBtn')
+            };
+
+            modalRefs.label.textContent = apiName;
+            modalRefs.desc.textContent = apiDesc;
+            modalRefs.content.textContent = '';
+            modalRefs.endpoint.textContent = '';
+            modalRefs.spinner.classList.add('d-none');
+            modalRefs.content.classList.add('d-none');
+            modalRefs.container.classList.add('d-none');
+            modalRefs.endpoint.classList.add('d-none');
+
+            modalRefs.queryInputContainer.innerHTML = '';
+            modalRefs.submitBtn.classList.add('d-none');
+            modalRefs.submitBtn.disabled = true;
+            modalRefs.submitBtn.classList.remove('btn-active');
+
+            const currentRoute = routes.find(route => route.path === apiPath && route.method.toLowerCase() === apiMethod.toLowerCase());
+            const parameters = currentRoute?.parameters || [];
+            const hasParams = parameters.length > 0;
+
+            if (hasParams) {
+                const paramContainer = document.createElement('div');
+                paramContainer.className = 'param-container';
+
+                const formTitle = document.createElement('h6');
+                formTitle.className = 'param-form-title';
+                formTitle.innerHTML = '<i class="fas fa-sliders-h"></i> Parameters';
+                paramContainer.appendChild(formTitle);
+
+                parameters.forEach((param, index) => {
+                    const isRequired = param.required !== false;
+                    const paramGroup = document.createElement('div');
+                    paramGroup.className = index < parameters.length - 1 ? 'mb-3 param-group' : 'param-group';
+
+                    const labelContainer = document.createElement('div');
+                    labelContainer.className = 'param-label-container';
+
+                    const label = document.createElement('label');
+                    label.className = 'form-label';
+                    label.textContent = param.name;
+                    label.htmlFor = `param-${param.name}`;
+
+                    if (isRequired) {
+                        const requiredSpan = document.createElement('span');
+                        requiredSpan.className = 'required-indicator';
+                        requiredSpan.textContent = '*';
+                        label.appendChild(requiredSpan);
+                    }
+
+                    labelContainer.appendChild(label);
+
+                    if (param.description) {
+                        const tooltipIcon = document.createElement('i');
+                        tooltipIcon.className = 'fas fa-info-circle param-info';
+                        tooltipIcon.setAttribute('data-bs-toggle', 'tooltip');
+                        tooltipIcon.setAttribute('data-bs-placement', 'top');
+                        tooltipIcon.title = param.description;
+                        labelContainer.appendChild(tooltipIcon);
+                    }
+
+                    paramGroup.appendChild(labelContainer);
+
+                    const inputContainer = document.createElement('div');
+                    inputContainer.className = 'input-container';
+
+                    const inputField = document.createElement('input');
+                    inputField.type = 'text';
+                    inputField.className = 'form-control custom-input';
+                    inputField.id = `param-${param.name}`;
+                    inputField.placeholder = `Enter ${param.name}...`;
+                    inputField.dataset.param = param.name;
+                    if (isRequired) {
+                        inputField.required = true;
+                    }
+                    inputField.autocomplete = "off";
+
+                    inputField.addEventListener('focus', () => {
+                        inputContainer.classList.add('input-focused');
+                    });
+
+                    inputField.addEventListener('blur', () => {
+                        inputContainer.classList.remove('input-focused');
+                        if (isRequired && !inputField.value.trim()) {
+                            inputField.classList.add('is-invalid');
+                        } else {
+                            inputField.classList.remove('is-invalid');
+                        }
+                    });
+
+                    inputField.addEventListener('input', validateInputs);
+
+                    inputContainer.appendChild(inputField);
+                    paramGroup.appendChild(inputContainer);
+                    paramContainer.appendChild(paramGroup);
+                });
+
+                if (currentRoute?.description) {
+                    const innerDescDiv = document.createElement('div');
+                    innerDescDiv.className = 'inner-desc';
+                    innerDescDiv.innerHTML = `<i class="fas fa-info-circle"></i> ${currentRoute.description.replace(/\n/g, '<br>')}`;
+                    paramContainer.appendChild(innerDescDiv);
+                }
+
+                modalRefs.queryInputContainer.appendChild(paramContainer);
+                modalRefs.submitBtn.classList.remove('d-none');
+
+                modalRefs.submitBtn.onclick = async () => {
+                    const inputs = modalRefs.queryInputContainer.querySelectorAll('input');
+                    const newParams = new URLSearchParams();
+                    let isValid = true;
+
+                    inputs.forEach(input => {
+                        const isRequired = input.required;
+                        if (isRequired && !input.value.trim()) {
+                            isValid = false;
+                            input.classList.add('is-invalid');
+                            input.parentElement.classList.add('shake-animation');
+                            setTimeout(() => {
+                                input.parentElement.classList.remove('shake-animation');
+                            }, 500);
+                        } else {
+                            input.classList.remove('is-invalid');
+                            if (input.value.trim()) {
+                                newParams.append(input.dataset.param, input.value.trim());
+                            }
+                        }
+                    });
+
+                    if (!isValid) {
+                        const errorMsg = document.createElement('div');
+                        errorMsg.className = 'alert alert-danger mt-3 fade-in';
+                        errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all required fields.';
+
+                        const existingError = modalRefs.queryInputContainer.querySelector('.alert');
+                        if (existingError) existingError.remove();
+
+                        modalRefs.queryInputContainer.appendChild(errorMsg);
+
+                        modalRefs.submitBtn.classList.add('shake-animation');
+                        setTimeout(() => {
+                            modalRefs.submitBtn.classList.remove('shake-animation');
+                        }, 500);
+
+                        return;
+                    }
+
+                    modalRefs.submitBtn.disabled = true;
+                    modalRefs.submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+
+                    const basePath = apiPath.split('?')[0];
+                    let apiUrlWithParams = `${window.location.origin}${basePath}`;
+                    const queryString = newParams.toString();
+                    if (queryString) {
+                        apiUrlWithParams += `?${queryString}`;
+                    }
+
+                    modalRefs.queryInputContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        modalRefs.queryInputContainer.innerHTML = '';
+                        modalRefs.queryInputContainer.style.opacity = '1';
+                        modalRefs.submitBtn.classList.add('d-none');
+                        handleApiRequest(apiUrlWithParams, modalRefs, apiName);
+                    }, 300);
+                };
+
+                const tooltips = modalRefs.queryInputContainer.querySelectorAll('[data-bs-toggle="tooltip"]');
+                tooltips.forEach(tooltip => {
+                    new bootstrap.Tooltip(tooltip);
+                });
+            } else {
+                const baseUrl = `${window.location.origin}${apiPath}`;
+                handleApiRequest(baseUrl, modalRefs, apiName);
+            }
+
+            modal.show();
         });
-    } else {
-        // Tidak ada parameter wajib, langsung eksekusi
-        const baseUrl = `${window.location.origin}${apiPath}`;
-        handleApiRequest(baseUrl, modalRefs, apiName);
-    }
-
-    modal.show();
-});
 
         function validateInputs() {
             const submitBtn = document.getElementById('submitQueryBtn');
             const inputs = document.querySelectorAll('.param-container input');
-            const isValid = Array.from(inputs).every(input => input.value.trim() !== '');
+            const requiredInputs = Array.from(inputs).filter(input => input.required);
+            const isValid = requiredInputs.every(input => input.value.trim() !== '');
 
             if (isValid) {
                 submitBtn.disabled = false;
