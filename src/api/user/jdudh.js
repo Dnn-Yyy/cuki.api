@@ -12,6 +12,7 @@ module.exports = {
     description: 'Get user by ID',
     parameters: [
       { name: 'id', in: 'path', required: true, description: 'User ID' }
-    ]
+    ],
+    isApikey: true
   }
 };
