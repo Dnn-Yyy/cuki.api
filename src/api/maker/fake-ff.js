@@ -7,11 +7,10 @@ const FONT_URL = 'https://raw.githubusercontent.com/ryyntwx/pakeff2/refs/heads/m
 const TEMPLATE_BASE_URL = 'https://raw.githubusercontent.com/ryyntwx/pakeff2/refs/heads/main/';
 
 let fontLoaded = false;
-const templateCache = {};
 
 async function downloadFile(url, targetPath) {
     try {
-        const response = await fetch(url, { timeout: 10000 });
+        const response = await fetch(url, { timeout: 15000 });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const buffer = Buffer.from(await response.arrayBuffer());
         fs.writeFileSync(targetPath, buffer);
@@ -55,10 +54,13 @@ module.exports = {
                 lobbyNumber = Math.floor(Math.random() * 17) + 1;
             }
 
-            const lobbyDir = path.join(process.cwd(), 'lobby');
-            const fontPath = path.join(process.cwd(), 'TeutonNormal.otf');
+            // ===== PAKAI /tmp/ BUKAN /var/task/ =====
+            const lobbyDir = path.join('/tmp', 'lobby');
+            const fontPath = path.join('/tmp', 'TeutonNormal.otf');
 
-            if (!fs.existsSync(lobbyDir)) fs.mkdirSync(lobbyDir, { recursive: true });
+            if (!fs.existsSync(lobbyDir)) {
+                fs.mkdirSync(lobbyDir, { recursive: true });
+            }
 
             if (!fs.existsSync(fontPath)) {
                 console.log('[FONT] Downloading TeutonNormal.otf...');
@@ -67,7 +69,7 @@ module.exports = {
                     return res.status(500).json({
                         status: false,
                         creator: "Rin imup",
-                        message: "Gagal download font"
+                        message: "Gagal download font. Coba lagi."
                     });
                 }
             }
@@ -86,20 +88,23 @@ module.exports = {
             }
 
             let templatePath = path.join(lobbyDir, `${lobbyNumber}.jpg`);
+            
             if (!fs.existsSync(templatePath)) {
                 console.log(`[TEMPLATE] Downloading ${lobbyNumber}.jpg...`);
                 const success = await downloadFile(`${TEMPLATE_BASE_URL}${lobbyNumber}.jpg`, templatePath);
+                
                 if (!success) {
                     const files = fs.readdirSync(lobbyDir).filter(f => f.endsWith('.jpg'));
                     if (files.length > 0) {
                         const fallback = files[Math.floor(Math.random() * files.length)];
                         templatePath = path.join(lobbyDir, fallback);
                         lobbyNumber = parseInt(fallback.split('.')[0], 10) || 1;
+                        console.log(`[FALLBACK] Using template: ${fallback}`);
                     } else {
                         return res.status(503).json({
                             status: false,
                             creator: "Rin imup",
-                            message: "Template sedang diunduh. Coba lagi."
+                            message: "Template sedang diunduh. Coba lagi dalam 5 detik."
                         });
                     }
                 }
