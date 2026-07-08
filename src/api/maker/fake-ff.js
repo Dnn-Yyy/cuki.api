@@ -35,13 +35,41 @@ module.exports = {
                 options.lobby = lobbyNumber;
             }
 
-            const result = await generateFF(options);
-
-            if (!result || result.status !== 'success') {
+            let result;
+            try {
+                result = await generateFF(options);
+            } catch (genErr) {
+                console.error('[GENERATE ERROR]', genErr);
                 return res.status(500).json({
                     status: false,
                     creator: "Rin imup",
-                    message: 'Gagal menghasilkan gambar lobby Free Fire.'
+                    message: 'Gagal generate gambar: ' + genErr.message,
+                    error: genErr.stack
+                });
+            }
+
+            if (!result) {
+                return res.status(500).json({
+                    status: false,
+                    creator: "Rin imup",
+                    message: 'Module fake-ff mengembalikan response kosong.'
+                });
+            }
+
+            if (result.status !== 'success') {
+                return res.status(500).json({
+                    status: false,
+                    creator: "Rin imup",
+                    message: 'Module fake-ff gagal: ' + (result.message || 'Unknown error'),
+                    result: result
+                });
+            }
+
+            if (!result.result) {
+                return res.status(500).json({
+                    status: false,
+                    creator: "Rin imup",
+                    message: 'Module fake-ff tidak mengembalikan path gambar.'
                 });
             }
 
@@ -51,15 +79,15 @@ module.exports = {
                 return res.status(500).json({
                     status: false,
                     creator: "Rin imup",
-                    message: 'File gambar tidak ditemukan.'
+                    message: 'File gambar tidak ditemukan di path: ' + imagePath
                 });
             }
 
             const imageBuffer = fs.readFileSync(imagePath);
             
             res.setHeader('Content-Type', 'image/png');
-            res.setHeader('X-Username', result.username);
-            res.setHeader('X-Lobby', String(result.lobby));
+            res.setHeader('X-Username', result.username || username);
+            res.setHeader('X-Lobby', String(result.lobby || lobbyNumber || 'random'));
             res.setHeader('Cache-Control', 'public, max-age=3600');
             
             return res.send(imageBuffer);
@@ -69,7 +97,8 @@ module.exports = {
             res.status(500).json({
                 status: false,
                 creator: "Rin imup",
-                message: err.message || 'Terjadi kesalahan internal.'
+                message: err.message || 'Terjadi kesalahan internal.',
+                stack: err.stack
             });
         }
     },
