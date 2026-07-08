@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "chalk": "^4.1.2",
     "express": "^4.19.2",
+    "fake-ff": "*",
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
     "node-fetch": "^2.6.1",
