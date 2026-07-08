@@ -1,0 +1,94 @@
+const generateFF = require('fake-ff');
+const path = require('path');
+const fs = require('fs');
+
+module.exports = {
+    method: 'get',
+    path: '/maker/fakeff',
+    handler: async (req, res) => {
+        try {
+            const username = req.query?.name || req.query?.username || req.query?.q;
+            const lobby = req.query?.template || req.query?.lobby || req.query?.t;
+
+            if (!username) {
+                return res.status(400).json({
+                    status: false,
+                    creator: "Rin imup",
+                    message: 'Parameter username diperlukan! Contoh: ?username=Ditzzx&lobby=5'
+                });
+            }
+
+            let lobbyNumber = parseInt(lobby, 10);
+            if (lobby && (isNaN(lobbyNumber) || lobbyNumber < 1 || lobbyNumber > 17)) {
+                return res.status(400).json({
+                    status: false,
+                    creator: "Rin imup",
+                    message: 'Parameter lobby harus angka 1-17 atau kosong untuk random.'
+                });
+            }
+
+            const options = {
+                username: username
+            };
+
+            if (lobby && !isNaN(lobbyNumber) && lobbyNumber >= 1 && lobbyNumber <= 17) {
+                options.lobby = lobbyNumber;
+            }
+
+            const result = await generateFF(options);
+
+            if (!result || result.status !== 'success') {
+                return res.status(500).json({
+                    status: false,
+                    creator: "Rin imup",
+                    message: 'Gagal menghasilkan gambar lobby Free Fire.'
+                });
+            }
+
+            const imagePath = path.resolve(result.result);
+            
+            if (!fs.existsSync(imagePath)) {
+                return res.status(500).json({
+                    status: false,
+                    creator: "Rin imup",
+                    message: 'File gambar tidak ditemukan.'
+                });
+            }
+
+            const imageBuffer = fs.readFileSync(imagePath);
+            
+            res.setHeader('Content-Type', 'image/png');
+            res.setHeader('X-Username', result.username);
+            res.setHeader('X-Lobby', String(result.lobby));
+            res.setHeader('Cache-Control', 'public, max-age=3600');
+            
+            return res.send(imageBuffer);
+
+        } catch (err) {
+            console.error('[ERROR]', err);
+            res.status(500).json({
+                status: false,
+                creator: "Rin imup",
+                message: err.message || 'Terjadi kesalahan internal.'
+            });
+        }
+    },
+    metadata: {
+        category: 'Maker',
+        description: 'Membuat gambar lobby custom Free Fire menggunakan module fake-ff.',
+        parameters: [
+            {
+                name: 'username',
+                in: 'query',
+                required: true,
+                description: 'Username atau nickname yang ingin ditampilkan'
+            },
+            {
+                name: 'lobby',
+                in: 'query',
+                required: false,
+                description: 'Nomor lobby 1-17 (kosong = random)'
+            }
+        ],
+    }
+};
